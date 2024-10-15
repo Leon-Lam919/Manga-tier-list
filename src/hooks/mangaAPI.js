@@ -1,18 +1,23 @@
-const isbn = '0451526538'; // Example ISBN
-const apiUrl = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
+const animeTitle = 'Naruto'; // Example ISBN
+const apiUrl = `https://api.mangadex.dev/manga?`;
 
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-    const bookKey = `ISBN:${isbn}`;  // Ensure we are accessing the correct key
-    const book = data[bookKey];       // Extract the book information using the correct key
-    if (book) {
-      console.log('Title:', book.title);
-      console.log('Authors:', book.authors.map(author => author.name).join(", "));
-      console.log('Published:', book.publish_date);
-    } else {
-      console.log('Book not found');
+const params = new URLSearchParams({
+  title: 'Naruto',
+  limit: 10,
+  offset: 0
+});
+
+//Make the API call
+fetch(`${apiUrl}?${params}`)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network reponse was not ok" + response.statusText);
     }
+    return response.json();
   })
-  .catch(error => console.error('Error fetching data:', error));
-
+  .then(data => {
+    console.log("Manga Data:", data);
+  })
+  .catch(error => {
+    console.error("There was a problem with the fetch operation:", error);
+  });
